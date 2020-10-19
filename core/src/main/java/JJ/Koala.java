@@ -53,7 +53,7 @@ public class Koala extends BaseActor {
         belowSensor.loadTexture("assets/white.png");
         belowSensor.setSize( this.getWidth() - 8, 8);
         belowSensor.setBoundaryRectangle();
-        belowSensor.setVisible(false);
+        belowSensor.setVisible(true);
     }
 
     public void act(float dt){

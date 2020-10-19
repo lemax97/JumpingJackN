@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="50" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="7">
+<map version="1.4" tiledversion="1.4.2" orientation="orthogonal" renderorder="right-down" width="50" height="20" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="41">
  <tileset firstgid="1" name="platform-tileset" tilewidth="32" tileheight="32" tilecount="18" columns="6">
   <image source="platform-tileset.png" width="192" height="96"/>
  </tileset>
@@ -101,5 +101,35 @@
     <property name="name" value="Solid"/>
    </properties>
   </object>
+  <object id="7" gid="22" x="33" y="607" width="32" height="32"/>
+  <object id="11" gid="19" x="256" y="448" width="32" height="32"/>
+  <object id="12" gid="19" x="288" y="448" width="32" height="32"/>
+  <object id="13" gid="19" x="256" y="576" width="32" height="32"/>
+  <object id="14" gid="19" x="288" y="576" width="32" height="32"/>
+  <object id="15" gid="19" x="256" y="288" width="32" height="32"/>
+  <object id="16" gid="19" x="288" y="288" width="32" height="32"/>
+  <object id="17" gid="19" x="352" y="320" width="32" height="32"/>
+  <object id="18" gid="24" x="192" y="320" width="32" height="32"/>
+  <object id="19" gid="23" x="192" y="384" width="32" height="32"/>
+  <object id="20" gid="23" x="224" y="384" width="32" height="32"/>
+  <object id="21" gid="23" x="256" y="384" width="32" height="32"/>
+  <object id="22" gid="23" x="288" y="384" width="32" height="32"/>
+  <object id="23" gid="23" x="320" y="384" width="32" height="32"/>
+  <object id="24" gid="23" x="352" y="384" width="32" height="32"/>
+  <object id="25" gid="19" x="416" y="480" width="32" height="32"/>
+  <object id="26" gid="19" x="448" y="480" width="32" height="32"/>
+  <object id="27" gid="19" x="480" y="480" width="32" height="32"/>
+  <object id="28" gid="21" x="448" y="416" width="32" height="32"/>
+  <object id="30" gid="25" x="608" y="576" width="32" height="32"/>
+  <object id="31" gid="25" x="608" y="544" width="32" height="32"/>
+  <object id="32" gid="25" x="608" y="608" width="32" height="32"/>
+  <object id="33" gid="25" x="640" y="512" width="32" height="32"/>
+  <object id="34" gid="25" x="672" y="512" width="32" height="32"/>
+  <object id="35" gid="25" x="704" y="512" width="32" height="32"/>
+  <object id="36" gid="25" x="736" y="512" width="32" height="32"/>
+  <object id="37" gid="25" x="768" y="544" width="32" height="32"/>
+  <object id="38" gid="25" x="768" y="576" width="32" height="32"/>
+  <object id="39" gid="25" x="768" y="608" width="32" height="32"/>
+  <object id="40" gid="20" x="672" y="608" width="32" height="32"/>
  </objectgroup>
 </map>
