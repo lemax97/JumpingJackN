@@ -53,7 +53,7 @@ public class Koala extends BaseActor {
         belowSensor.loadTexture("assets/white.png");
         belowSensor.setSize( this.getWidth() - 8, 8);
         belowSensor.setBoundaryRectangle();
-        belowSensor.setVisible(true);
+        belowSensor.setVisible(false);
     }
 
     public void act(float dt){
@@ -142,4 +142,21 @@ public class Koala extends BaseActor {
 
         velocityVec.y = jumpSpeed;
     }
+
+    public boolean isJumping(){
+
+        return (velocityVec.y > 0);
+    }
+
+    public boolean isFalling(){
+
+        return (velocityVec.y < 0);
+    }
+
+    public void spring(){
+
+        velocityVec.y = 1.5f * jumpSpeed;
+    }
+
+
 }

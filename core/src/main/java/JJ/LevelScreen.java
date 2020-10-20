@@ -7,6 +7,9 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.Gdx;
+import java.util.ArrayList;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 /** First screen of the application. Displayed after the application is created. */
 public class LevelScreen extends BaseScreen {
@@ -21,8 +24,12 @@ public class LevelScreen extends BaseScreen {
 	Label timeLabel;
 	Label messageLabel;
 
+	ArrayList<Color> keyList;
+
 	@Override
 	public void initialize() {
+
+		keyList = new ArrayList<Color>();
 
 		TilemapActor tma = new TilemapActor("assets/map.tmx", mainStage);
 
@@ -60,6 +67,49 @@ public class LevelScreen extends BaseScreen {
 			MapProperties props = obj.getProperties();
 			new Coin( (float)props.get("x"), (float)props.get("y"), mainStage );
 		}
+
+		for (MapObject obj : tma.getTileList("Timer")) {
+
+			MapProperties props = obj.getProperties();
+			new Timer( (float)props.get("x"), (float)props.get("y"), mainStage);
+		}
+
+
+		for (MapObject obj : tma.getTileList("Springboard")) {
+
+			MapProperties props = obj.getProperties();
+			new Springboard( (float)props.get("x"), (float)props.get("y"), mainStage);
+		}
+
+		for (MapObject obj : tma.getTileList("Platform")) {
+
+			MapProperties props = obj.getProperties();
+			new Platform( (float) props.get("x"), (float) props.get("y"), mainStage);
+		}
+
+		for (MapObject obj : tma.getTileList("Key")) {
+
+			MapProperties props = obj.getProperties();
+			Key key = new Key( (float)props.get("x"), (float)props.get("y"), mainStage);
+			String color = (String)props.get("color");
+			if (color.equals("red"))
+				key.setColor(Color.RED);
+			else // default color
+				key.setColor(Color.WHITE);
+		}
+
+		for (MapObject obj : tma.getTileList("Lock")) {
+
+			MapProperties props = obj.getProperties();
+			Lock lock = new Lock((float)props.get("x"), (float)props.get("y"), mainStage);
+			String color = (String)props.get("color");
+			if (color.equals("red"))
+				lock.setColor(Color.RED);
+			else // default color
+				lock.setColor(Color.WHITE);
+		}
+
+		jack.toFront();
 
 		uiTable.pad(20);
 		uiTable.add(coinLabel);
@@ -102,6 +152,29 @@ public class LevelScreen extends BaseScreen {
 
 			Solid solid = (Solid) actor;
 
+			if ( solid instanceof Platform) {
+
+				if (jack.isJumping() && jack.overlaps(solid))
+					solid.setEnabled(false);
+
+				if (jack.isJumping() && !jack.overlaps(solid))
+					solid.setEnabled(true);
+
+				if ( jack.isFalling() && !jack.overlaps(solid) && !jack.belowOverlaps(solid))
+					solid.setEnabled(true);
+			}
+
+			if ( solid instanceof Lock && jack.overlaps(solid)) {
+
+				Color lockColor = solid.getColor();
+				if ( keyList.contains(lockColor) ) {
+
+					solid.setEnabled(false);
+					solid.addAction( Actions.fadeOut(0.5f));
+					solid.addAction( Actions.after( Actions.removeActor()));
+				}
+			}
+
 			if ( jack.overlaps(solid) && solid.isEnabled()){
 
 				Vector2 offset = jack.preventOverlap(solid);
@@ -116,14 +189,71 @@ public class LevelScreen extends BaseScreen {
 				}
 			}
 		}
+
+		time -= dt;
+		timeLabel.setText("Time: " + (int)time);
+
+		for (BaseActor timer : BaseActor.getList(mainStage, "JJ.Timer")) {
+
+			if (jack.overlaps(timer)) {
+
+				time += 20;
+				timer.remove();
+			}
+		}
+
+		for (BaseActor springboard : BaseActor.getList(mainStage, "JJ.Springboard")) {
+
+			if ( jack.belowOverlaps(springboard) && jack.isFalling() ) {
+
+				jack.spring();
+			}
+		}
+
+		for (BaseActor key : BaseActor.getList(mainStage, "JJ.Key")) {
+
+			if ( jack.overlaps(key)) {
+
+				Color keyColor = key.getColor();
+				key.remove();
+				BaseActor keyIcon = new BaseActor(0,0, uiStage);
+				keyIcon.loadTexture("assets/key-icon.png");
+				keyIcon.setColor(keyColor);
+				keyTable.add(keyIcon);
+				keyList.add(keyColor);
+			}
+		}
+
+		if (time <= 0) {
+
+			messageLabel.setText("Time Up - Game Over");
+			messageLabel.setColor(Color.RED);
+			messageLabel.setVisible(true);
+			jack.remove();
+			gameOver = true;
+		}
 	}
 
 	@Override
 	public boolean keyDown(int keyCode) {
 
+		if (gameOver)
+			return false;
+
 		if (keyCode == Keys.SPACE) {
 
-			if ( jack.isOnSolid() ) {
+			if ( Gdx.input.isKeyPressed(Keys.DOWN)) {
+
+				for (BaseActor actor : BaseActor.getList(mainStage, "JJ.Platform")) {
+
+					Platform platform = (Platform)actor;
+					if ( jack.belowOverlaps(platform)) {
+
+						platform.setEnabled(false);
+					}
+				}
+			}
+			else if ( jack.isOnSolid() ) {
 
 				jack.jump();
 			}
